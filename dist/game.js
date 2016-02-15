@@ -1,17 +1,26 @@
 
 var game = {
+
 	direction: undefined,
+	numberArray: [],
 
 	emptyTileX	: 3,
 	emptyTileY	: 3,
 
-	moveSpeed: 300,
+	moveSpeed: 200,
+	totalTiles: 15,
 
 	init: function(){
 		var tile = $('.grid-container .tile');
 
+		this.generateArray();
+		this.randomizer();
+
 		tile.each(function(index, value){
-			$(this).text(index + 1);
+			var $this = $(this);
+			
+			$this.text(game.numberArray[index] + 1);
+			$this.attr('data-refLoc', game.numberArray[index] + 1);
 		});
 
 		tile.on('click', function(e) {
@@ -46,8 +55,9 @@ var game = {
 			game.vacantReset(currentX, currentY);
 
 		} else {
-			console.log("cannot move");
 		}
+
+		game.gameOver();
 	},
 
 	moveUp: function() {
@@ -85,7 +95,45 @@ var game = {
 	vacantReset: function(x,y) {
 		this.emptyTileX = x;
 		this.emptyTileY = y;
+	},
+
+	generateArray: function() {
+		for( var i = 0; i < this.totalTiles; i++ ) {
+			this.numberArray.push(i);
+		}
+	},
+
+	randomizer: function() {
+		var arr = this.numberArray;
+		this.shuffle(arr);
+	},
+
+    // Fisher–Yates Shuffle -- Unbiased shuffle algorithm
+	shuffle: function(array) {
+		var m = array.length, t, i;
+		while(m) {
+			i = Math.floor(Math.random() * m--);
+			t = array[m];
+			array[m] = array[i];
+			array[i] = t;
+		}
+		return array;
+	},
+
+	gameOver: function() {
+		console.log("-------")
 	}
 }
 
 game.init();
+
+
+
+
+
+
+
+
+
+
+
